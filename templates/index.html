@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Lost & Found</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<style>
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #e0e0e0;
+    font-size: 16px;
+}
+
+/* Header */
+h1 {
+    text-align: center;
+    padding: 25px 10px;
+    color: #ffcc00;
+    font-size: 2rem;
+}
+
+/* Add Item Form */
+.add-form {
+    width: 95vw;
+    margin: 0 auto 20px;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+}
+
+.add-form input, .add-form textarea, .add-form button,
+.Response-form input, .Response-form textarea, .Response-form button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 16px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.add-form button, .Response-form button {
+    background: linear-gradient(45deg, #ff6a00, #ee0979);
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-form button:hover, .Response-form button:hover {
+    background: linear-gradient(45deg, #ee0979, #ff6a00);
+    transform: scale(1.05);
+}
+
+/* Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 0 5px 50px;
+}
+
+/* Card */
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 95vw;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+}
+
+/* Image */
+.image-container {
+    position: relative;
+    height: 320px; /* bigger image */
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.image-container:hover img {
+    transform: scale(1.05);
+}
+
+.overlay {
+    position: absolute;
+    top:0; left:0; width:100%; height:100%;
+    display: flex; justify-content:center; align-items:center;
+    opacity:0;
+    transition:0.3s;
+    border-radius: 15px 15px 0 0;
+    pointer-events: none;
+}
+
+.overlay button { pointer-events: all; }
+
+.image-container:hover .overlay { opacity:1; }
+
+.view-btn {
+    background:#ff6a00; color:#fff; border:none; padding:8px 12px;
+    border-radius:12px; cursor:pointer; font-size:14px;
+}
+
+.view-btn:hover { background:#ee0979; }
+
+/* Card content */
+.card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:10px;
+}
+
+.description {
+    font-size:16px;
+    margin:0 0 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Footer with badge & buttons */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.badge { display: inline-block; padding:5px 10px; border-radius:12px; font-size:14px; }
+.found { background:#28a745; }
+.lost { background:#fd7e14; }
+
+.mark-found-btn { margin:0; padding:8px 12px; font-size:14px; border-radius:12px; background:#28a745; color:#fff; cursor:pointer; }
+.mark-found-btn:hover { background:#1e7e34; }
+
+.delete-btn { margin:0; padding:8px 12px; font-size:14px; border-radius:12px; background:#dc3545; color:#fff; cursor:pointer; }
+.delete-btn:hover { background:#a71d2a; }
+
+.Responses-box {
+  background: rgba(0,0,0,0.3); border-radius:12px; padding:8px; margin-top:8px;
+  font-size:14px; max-height:80px; overflow-y:auto;
+}
+
+/* Modal */
+#imgModal {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.95); justify-content:center; align-items:center; z-index:9999;
+}
+
+#imgModal img { max-width:95%; max-height:80%; border-radius:12px; }
+#imgModal .close-btn { position:absolute; top:20px; right:20px; font-size:35px; color:#fff; cursor:pointer; }
+
+@media (min-width: 900px) {
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        justify-items: center;
+        padding: 20px;
+    }
+
+    .card { width: 300px; height: 550px; } /* taller card for bigger image */
+}
+</style>
+</head>
+<body>
+
+<h1>College Lost & Found</h1>
+
+<form id="addItemForm" class="add-form" enctype="multipart/form-data">
+  <textarea name="description" placeholder="Item Description" required></textarea>
+  <input type="file" name="image" accept="image/*">
+  <button type="submit"><i class="fas fa-plus"></i> Add Item</button>
+</form>
+
+<div id="itemsContainer" class="container"></div>
+
+<!-- Image Modal -->
+<div id="imgModal" onclick="closeModal()">
+  <span class="close-btn">&times;</span>
+  <img id="modalImage" src="">
+</div>
+
+<script>
+function openModal(src){ document.getElementById('imgModal').style.display='flex'; document.getElementById('modalImage').src=src; }
+function closeModal(){ document.getElementById('imgModal').style.display='none'; }
+
+function loadItems(){
+  fetch('/get_items')
+    .then(res=>res.json())
+    .then(data=>{
+      const container=document.getElementById('itemsContainer');
+      container.innerHTML='';
+      data.forEach((item,index)=>{
+        const card=document.createElement('div'); card.className='card';
+        card.innerHTML=`
+        ${item.image?`
+        <div class="image-container">
+          <img src="/static/uploads/${item.image}">
+          <div class="overlay"><button class="view-btn" onclick="openModal('/static/uploads/${item.image}')">View</button></div>
+        </div>`:''}
+        <div class="card-content">
+          <p class="description">${item.description}</p>
+          <div class="card-footer">
+            <span class="badge ${item.found?'found':'lost'}">${item.found?'Found':'Lost'}</span>
+            <div style="display:flex; gap:5px;">
+              ${!item.found?`<button class="mark-found-btn" onclick="markFound(${item.id})">Mark as Found</button>`:''}
+              <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+            </div>
+          </div>
+          <div class="Responses-box"><b>Responses:</b><ul>${item.Responses.map(n=>`<li><b>${n.name}:</b> ${n.Response}</li>`).join('')}</ul></div>
+          <form class="Response-form" onsubmit="submitResponse(event,${item.id})">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <textarea name="Response" placeholder="Add a Response" required></textarea>
+            <button type="submit">Submit Response</button>
+          </form>
+        </div>`;
+        container.appendChild(card);
+      });
+    });
+}
+
+document.getElementById('addItemForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const formData=new FormData(this);
+  fetch('/add',{method:'POST',body:formData})
+    .then(res=>res.json())
+    .then(()=>{ loadItems(); this.reset(); });
+});
+
+function markFound(id){ fetch(`/mark_found/${id}`,{method:'POST'}).then(()=>loadItems()); }
+function deleteItem(id){ if(confirm("Are you sure?")){ fetch(`/delete_item/${id}`,{method:'POST'}).then(()=>loadItems()); } }
+function submitResponse(e,id){ e.preventDefault(); const form=e.target; const data=new FormData(form); fetch(`/add_Response/${id}`,{method:'POST',body:data}).then(()=>{loadItems();form.reset();}); }
+
+loadItems();
+</script>
+
+</body>
+</html>
